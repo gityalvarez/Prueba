@@ -1,0 +1,35 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	Tabla de Organizaciones
+</h:head>
+
+<h:body>
+	<p:panel header="Tabla de Organizaciones" style="margin-bottom:10px;">
+		<p:dataTable var="organizacion" value="#{TablaOrganizacionesView.getOrganizaciones()}">
+			<p:column headerText="Id">
+				<h:outputText value="#{organizacion.id}" />
+			</p:column>
+
+			<p:column headerText="Nombre">
+				<h:outputText value="#{organizacion.nombre}" />
+			</p:column>
+			
+			<p:column headerText="Estado">
+				<h:outputText value="#{organizacion.estado}" />
+			</p:column>
+			
+			<p:column style="width:32px;text-align: center">
+             <p:commandButton   icon="ui-icon-accept" title="View">
+            </p:commandButton>
+        </p:column>
+
+
+		</p:dataTable>
+	</p:panel>
+</h:body>
+</html>
