@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flujo Requerimientos</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 820px; margin: 2rem auto; padding: 0 1rem; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.25rem; }
+    button { padding: .65rem 1rem; border: none; background: #0f62fe; color: white; border-radius: 8px; cursor: pointer; }
+    pre { white-space: pre-wrap; background: #f6f8fa; padding: .75rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Flujo local de requerimientos</h1>
+  <div class="card">
+    <p>Sube la transcripción (.txt). El flujo hace:</p>
+    <ol>
+      <li>Sube texto a n8n.</li>
+      <li>Recibe HTML del documento + TXT resumen.</li>
+      <li>Genera PDF localmente.</li>
+      <li>Abre Lovable con el resumen en la URL.</li>
+    </ol>
+    <form id="form">
+      <input type="file" id="transcript" accept=".txt" required />
+      <button type="submit">Ejecutar flujo</button>
+    </form>
+    <h3>Resultado</h3>
+    <pre id="output">Esperando ejecución...</pre>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('transcript');
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      output.textContent = 'Procesando...';
+      const data = new FormData();
+      data.append('transcript', file);
+
+      try {
+        const res = await fetch('/api/process-transcript', { method: 'POST', body: data });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Error desconocido');
+        output.textContent = JSON.stringify(json, null, 2);
+      } catch (err) {
+        output.textContent = `Error: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
